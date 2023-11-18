@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  db:
+    image: 'postgres:16.1-alpine3.18'
+    volumes:
+      - 'db:/var/lib/postgresql/data'
+    ports:
+      - '5432:5432' #host:container
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=bitly_clone
+      - POSTGRES_PASSWORD=password
+
+  api:
+    depends_on:
+      - 'db'
+      - 'redis'
+    build: .
+    ports:
+      - '3001:3001' #host:container
+      - '9222:9222' #debugger port
+    volumes:
+      - ./:/usr/src/app
+    command: bash -c "node index.js"
+    # command: bash -c "npm install -g nodemon && yarn install && nodemon --inspect=0.0.0.0:9222 index.js"
+    environment:
+      # WEB SERVER
+      - NODE_ENV=local
+      - PORT=3001
+      # CACHE
+      - REDIS_URL=redis://redis
+      # DATABASEdoc
+      - DATABASE_URL=postgres://bitly_clone:password@db:5432/bitly_clone
+
+  redis:
+    image: 'redis/redis-stack'
+    ports:
+      - '8001:8001' #host:container
+
+volumes:
+  db:
