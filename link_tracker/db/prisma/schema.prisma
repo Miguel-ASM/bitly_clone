@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Link {
+  id           Int         @id @default(autoincrement())
+  original_url String      @db.Text
+  short_url    String      @db.Text
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @default(now()) @updatedAt
+  link_visits  LinkVisit[]
+
+  @@map("links")
+}
+
+model LinkVisit {
+  id         Int      @id @default(autoincrement())
+  link_id    Int
+  visitor_id Int
+  link       Link     @relation(fields: [link_id], references: [id])
+  visitor    Visitor  @relation(fields: [visitor_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  @@map("link_visits")
+}
+
+model Visitor {
+  id            Int         @id @default(autoincrement())
+  last_visit_at DateTime    @default(now())
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @default(now()) @updatedAt
+  link_visits   LinkVisit[]
+
+  @@map("visitors")
+}
