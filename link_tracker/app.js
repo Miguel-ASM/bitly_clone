@@ -7,7 +7,7 @@ const { randomUUID } = require('crypto');
 const prisma = new PrismaClient();
 const app = express();
 
-const { PORT = 3001, NODE_ENV } = process.env;
+const { PORT, NODE_ENV } = process.env;
 
 app.set('port', PORT);
 app.set('env', NODE_ENV);

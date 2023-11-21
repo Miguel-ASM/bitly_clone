@@ -1,19 +1,18 @@
 {
   "name": "bitly_clone__backend",
-  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "5.6.0",
+    "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
-    "dot-env": "^0.0.1",
     "express": "4.18.2",
     "morgan": "^1.10.0"
   },
@@ -21,6 +20,7 @@
     "prisma": "^5.6.0"
   },
   "prisma": {
-    "schema": "./db/prisma/schema.prisma"
+    "schema": "./db/prisma/schema.prisma",
+    "seed": "node db/prisma/seed.js"
   }
 }
